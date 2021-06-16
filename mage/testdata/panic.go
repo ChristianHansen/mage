@@ -2,7 +2,11 @@
 
 package main
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/magefile/mage/mg"
+)
 
 // Function that panics.
 func Panics() {
@@ -12,4 +16,8 @@ func Panics() {
 // Error function that panics.
 func PanicsErr() error {
 	panic(errors.New("kaboom!"))
+}
+
+func PanicsInDep() {
+	mg.Deps(Panics)
 }

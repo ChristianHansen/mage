@@ -630,9 +630,10 @@ func TestTargetPanics(t *testing.T) {
 	stderr := &bytes.Buffer{}
 	inv := Invocation{
 		Dir:    "./testdata",
-		Stdout: ioutil.Discard,
-		Stderr: stderr,
-		Args:   []string{"panics"},
+		Stdout: os.Stdout, //ioutil.Discard,
+		Stderr: os.Stderr, //stderr,
+
+		Args: []string{"panics"},
 	}
 	code := Invoke(inv)
 	if code != 1 {
@@ -643,6 +644,27 @@ func TestTargetPanics(t *testing.T) {
 	if actual != expected {
 		t.Fatalf("expected %q, but got %q", expected, actual)
 	}
+}
+
+func TestDepPanics(t *testing.T) {
+	stderr := &bytes.Buffer{}
+	inv := Invocation{
+		Dir:    "./testdata",
+		Stdout: os.Stdout, //ioutil.Discard,
+		Stderr: stderr,
+
+		Args: []string{"panicsInDep"},
+	}
+	Invoke(inv)
+	// if code != 1 {
+	// 	t.Fatalf("expected 1, but got %v", code)
+	// }
+	actual := stderr.String()
+	expected := `Error: panic when running target "main.Panics": boom!\n`
+	if actual != expected {
+		t.Fatalf("expected %q, but got %q", expected, actual)
+	}
+
 }
 
 func TestPanicsErr(t *testing.T) {

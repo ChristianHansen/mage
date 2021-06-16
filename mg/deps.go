@@ -107,7 +107,7 @@ func runDeps(ctx context.Context, fns []Fn) {
 					} else {
 						exit = changeExit(exit, 1)
 					}
-					errs = append(errs, fmt.Sprint(v))
+					errs = append(errs, fmt.Sprintf("panic when running target %q: %v", fn.fn.Name(), v))
 					mu.Unlock()
 				}
 				wg.Done()
